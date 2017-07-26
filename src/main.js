@@ -1,54 +1,58 @@
 export function BabySitter(startTime, endTime){
     return calculateAfternoonPay(startTime, endTime) + calculateEveningPay(startTime, endTime) + calculateLateNightPay(startTime, endTime);
 }
-const afternoonPayRate = 7;
-const eveningPayRate = 11;
-const lateNightPayRate = 13;
 
 function calculateAfternoonPay(startTime, endTime){
-    let afternoonHours = 0;
-    if(isAfternoon(startTime)){
-        if(isAfternoonExceeding(endTime, startTime)){
-            afternoonHours = 17 - startTime;
-        }
-        else{
-            afternoonHours = endTime - startTime;
-        }
-    }
-    return afternoonHours * afternoonPayRate;
+    return getAfternoonHours(startTime, endTime) * afternoonPayRate;
 }
 
 function calculateEveningPay(startTime, endTime){
-    let eveningHours = 0;
-
-    if (isAfternoonExceeding(endTime, startTime))
-        startTime = 17;
-
-    if(isEvening(startTime)){
-        if(isEveningExceeding(endTime, startTime)){
-            eveningHours = 22 - startTime;
-        }
-        else{
-            eveningHours = endTime - startTime;
-        }
-    }
-    return eveningHours * eveningPayRate;
+    return getEveningHours(startTime, endTime) * eveningPayRate;
 }
 
 function calculateLateNightPay(startTime, endTime){
-    let lateNightHours = 0;
+    return getLateNightHours(startTime, endTime) * lateNightPayRate;
+}
 
-    if (isEveningExceeding(endTime, startTime))
+function getAfternoonHours(startTime, endTime) {
+
+    if(!isAfternoon(startTime))
+        return 0;
+
+    if(isAfternoonExceeding(endTime, startTime))
+        endTime = 17;
+
+    return calculate(startTime, endTime);
+}
+
+function getEveningHours(startTime, endTime){
+    if(isAfternoonExceeding(endTime, startTime))
+        startTime = 17;
+
+    if(!isEvening(startTime))
+        return 0;
+
+    if(isEveningExceeding(endTime, startTime))
+        endTime = 22;
+
+    return calculate(startTime, endTime);
+}
+
+function getLateNightHours(startTime, endTime){
+    if(isEveningExceeding(endTime, startTime))
         startTime = 22;
 
-    if(isLateNight(startTime)){
-        if(endTime < startTime)
-            lateNightHours = 24 - startTime + endTime;
-        else
-            lateNightHours = endTime - startTime;
-    }
+    if(!isLateNight(startTime))
+        return 0;
 
-    return lateNightHours * lateNightPayRate;
+    return calculate(startTime, endTime, endTime < startTime);
+}
+
+function calculate(startTime, endTime, LateNight = false){
+    if(LateNight)
+        return 24 - startTime + endTime;
+
+    return endTime - startTime;
 }
 
 function isAfternoon(startTime){
@@ -56,7 +60,7 @@ function isAfternoon(startTime){
 }
 
 function isAfternoonExceeding(endTime, startTime){
-    return startTime < 17 && startTime >= 13 && (endTime > 17 || endTime < 4);
+    return isAfternoon(startTime) && (endTime > 17 || endTime < 4);
 }
 
 function isEvening(startTime){
@@ -64,9 +68,13 @@ function isEvening(startTime){
 }
 
 function isEveningExceeding(endTime, startTime){
-    return endTime > 22 || endTime < 4 && startTime < 22 && startTime >= 13;
+    return (isAfternoon(startTime) || isEvening(startTime)) && (endTime > 22 || endTime < 4);
 }
 
 function isLateNight(startTime){
     return startTime >= 22 || startTime < 4;
 }
+
+const afternoonPayRate = 7;
+const eveningPayRate = 11;
+const lateNightPayRate = 13;
