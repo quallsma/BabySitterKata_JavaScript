@@ -2,6 +2,10 @@ export function BabySitter(startTime, endTime){
     return calculateAfternoonPay(startTime, endTime) + calculateEveningPay(startTime, endTime) + calculateLateNightPay(startTime, endTime);
 }
 
+const afternoonPayRate = 7;
+const eveningPayRate = 11;
+const lateNightPayRate = 13;
+
 function calculateAfternoonPay(startTime, endTime){
     return getAfternoonHours(startTime, endTime) * afternoonPayRate;
 }
@@ -48,7 +52,7 @@ function getLateNightHours(startTime, endTime){
     return calculate(startTime, endTime, endTime < startTime);
 }
 
-function calculate(startTime, endTime, LateNight = false){
+function calculate(startTime, endTime, LateNight){
     if(LateNight)
         return 24 - startTime + endTime;
 
@@ -74,7 +78,3 @@ function isEveningExceeding(endTime, startTime){
 function isLateNight(startTime){
     return startTime >= 22 || startTime < 4;
 }
-
-const afternoonPayRate = 7;
-const eveningPayRate = 11;
-const lateNightPayRate = 13;
