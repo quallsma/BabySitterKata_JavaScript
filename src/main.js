@@ -23,8 +23,8 @@ let calculateEveningPay = (startTime, endTime) => {
     if (startTime < 17 && startTime >= 13 && (endTime > 17 || endTime < 4))
         startTime = 17;
 
-    if(isEvening(startTime, endTime)){
-        if(isEveningExceeding(startTime, endTime)){
+    if(isEvening(startTime)){
+        if(isEveningExceeding(endTime)){
             eveningHours = 22 - startTime;
         }
         else{
@@ -41,7 +41,7 @@ let calculateLateNightPay = (startTime, endTime) => {
     if (startTime < 22 && startTime >= 13 && (endTime > 22 || endTime < 4))
         startTime = 22;
 
-    if(isLateNight(startTime, endTime)){
+    if(isLateNight(startTime)){
         if(endTime < startTime)
             lateNightHours = 24 - startTime + endTime;
         else
@@ -59,14 +59,14 @@ let isAfternoonExceeding = (endTime) => {
     return endTime > 17 || (endTime >= 0 && endTime < 4);
 }
 
-let isEvening = (startTime, endTime) => {
+let isEvening = (startTime) => {
     return startTime >= 17 && startTime < 22;
 }
 
-let isEveningExceeding = (startTime, endTime) => {
+let isEveningExceeding = (endTime) => {
     return endTime > 22 || (endTime >= 0 && endTime < 4);
 }
 
-let isLateNight = (startTime, endTime) => {
+let isLateNight = (startTime) => {
     return startTime >= 22 || (startTime >= 0 && startTime < 4);
 }
