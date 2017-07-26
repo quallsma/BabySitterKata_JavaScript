@@ -19,7 +19,6 @@ function calculateAfternoonPay(startTime, endTime){
 }
 
 function calculateEveningPay(startTime, endTime){
-    const eveningPayRate = 11;
     let eveningHours = 0;
 
     if (isAfternoonExceeding(endTime, startTime))
@@ -37,7 +36,6 @@ function calculateEveningPay(startTime, endTime){
 }
 
 function calculateLateNightPay(startTime, endTime){
-    const lateNightPayRate = 13;
     let lateNightHours = 0;
 
     if (isEveningExceeding(endTime, startTime))
