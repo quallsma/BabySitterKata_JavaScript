@@ -1,0 +1,22 @@
+{
+  "name": "babysitter",
+  "version": "1.0.0",
+  "babel": {
+    "presets": ["es2015"]
+  },
+  "description": "Baby Sitter payment Application",
+  "main": "src/main.js",
+  "test": "test/test.js",
+  "scripts": {
+    "test": "mocha --watch --compilers js:babel-register || exit 0"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "chai": "^4.1.0",
+    "mocha": "^3.4.2"
+  }
+}
