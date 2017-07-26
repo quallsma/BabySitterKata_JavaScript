@@ -1,4 +1,4 @@
-import {expect} from 'chai';
+import { expect } from 'chai';
 import {BabySitter} from '../src/main.js';
 
 describe("BabySitter Application", () => {

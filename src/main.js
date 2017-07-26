@@ -1,14 +1,19 @@
-export function BabySitter(startTime, endTime){
-    return calculateAfternoonPay(startTime, endTime) + calculateEveningPay(startTime, endTime) + calculateLateNightPay(startTime, endTime);
+export function BabySitter(startTime1, endTime1){
+    startTime = startTime1;
+    endTime = endTime1;
+    return getAfternoonHours(startTime, endTime) * afternoonPayRate + calculateEveningPay(startTime, endTime) + calculateLateNightPay(startTime, endTime);
 }
 
 const afternoonPayRate = 7;
 const eveningPayRate = 11;
 const lateNightPayRate = 13;
 
-function calculateAfternoonPay(startTime, endTime){
-    return getAfternoonHours(startTime, endTime) * afternoonPayRate;
-}
+let startTime;
+let endTime;
+//
+// function calculateAfternoonPay(startTime, endTime){
+//     return getAfternoonHours(startTime, endTime) * afternoonPayRate;
+// }
 
 function calculateEveningPay(startTime, endTime){
     return getEveningHours(startTime, endTime) * eveningPayRate;

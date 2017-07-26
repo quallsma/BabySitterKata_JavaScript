@@ -2,7 +2,9 @@
   "name": "babysitter",
   "version": "1.0.0",
   "babel": {
-    "presets": ["es2015"]
+    "presets": [
+      "es2015"
+    ]
   },
   "description": "Baby Sitter payment Application",
   "main": "src/main.js",
@@ -18,5 +20,8 @@
     "babel-register": "^6.24.1",
     "chai": "^4.1.0",
     "mocha": "^3.4.2"
+  },
+  "dependencies": {
+    "restore": "^0.3.0"
   }
 }
