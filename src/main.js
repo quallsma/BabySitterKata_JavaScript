@@ -1,12 +1,14 @@
-export const BabySitter =  (startTime, endTime) => {
+export function BabySitter(startTime, endTime){
     return calculateAfternoonPay(startTime, endTime) + calculateEveningPay(startTime, endTime) + calculateLateNightPay(startTime, endTime);
 }
+const afternoonPayRate = 7;
+const eveningPayRate = 11;
+const lateNightPayRate = 13;
 
-let calculateAfternoonPay = (startTime, endTime) => {
-    const afternoonPayRate = 7;
+function calculateAfternoonPay(startTime, endTime){
     let afternoonHours = 0;
     if(isAfternoon(startTime)){
-        if(isAfternoonExceeding(endTime)){
+        if(isAfternoonExceeding(endTime, startTime)){
             afternoonHours = 17 - startTime;
         }
         else{
@@ -16,15 +18,15 @@ let calculateAfternoonPay = (startTime, endTime) => {
     return afternoonHours * afternoonPayRate;
 }
 
-let calculateEveningPay = (startTime, endTime) => {
+function calculateEveningPay(startTime, endTime){
     const eveningPayRate = 11;
     let eveningHours = 0;
 
-    if (startTime < 17 && startTime >= 13 && (endTime > 17 || endTime < 4))
+    if (isAfternoonExceeding(endTime, startTime))
         startTime = 17;
 
     if(isEvening(startTime)){
-        if(isEveningExceeding(endTime)){
+        if(isEveningExceeding(endTime, startTime)){
             eveningHours = 22 - startTime;
         }
         else{
@@ -34,11 +36,11 @@ let calculateEveningPay = (startTime, endTime) => {
     return eveningHours * eveningPayRate;
 }
 
-let calculateLateNightPay = (startTime, endTime) => {
+function calculateLateNightPay(startTime, endTime){
     const lateNightPayRate = 13;
     let lateNightHours = 0;
 
-    if (startTime < 22 && startTime >= 13 && (endTime > 22 || endTime < 4))
+    if (isEveningExceeding(endTime, startTime))
         startTime = 22;
 
     if(isLateNight(startTime)){
@@ -51,22 +53,22 @@ let calculateLateNightPay = (startTime, endTime) => {
     return lateNightHours * lateNightPayRate;
 }
 
-let isAfternoon = (startTime) => {
-    return startTime >= 13 && startTime < 18;
+function isAfternoon(startTime){
+    return startTime >= 13 && startTime < 17;
 }
 
-let isAfternoonExceeding = (endTime) => {
-    return endTime > 17 || (endTime >= 0 && endTime < 4);
+function isAfternoonExceeding(endTime, startTime){
+    return startTime < 17 && startTime >= 13 && (endTime > 17 || endTime < 4);
 }
 
-let isEvening = (startTime) => {
+function isEvening(startTime){
     return startTime >= 17 && startTime < 22;
 }
 
-let isEveningExceeding = (endTime) => {
-    return endTime > 22 || (endTime >= 0 && endTime < 4);
+function isEveningExceeding(endTime, startTime){
+    return endTime > 22 || endTime < 4 && startTime < 22 && startTime >= 13;
 }
 
-let isLateNight = (startTime) => {
-    return startTime >= 22 || (startTime >= 0 && startTime < 4);
+function isLateNight(startTime){
+    return startTime >= 22 || startTime < 4;
 }
