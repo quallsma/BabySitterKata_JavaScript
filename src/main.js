@@ -1,19 +1,27 @@
-export function BabySitter(startTime1, endTime1){
-    startTime = startTime1;
-    endTime = endTime1;
-    return getAfternoonHours(startTime, endTime) * afternoonPayRate + calculateEveningPay(startTime, endTime) + calculateLateNightPay(startTime, endTime);
+export function BabySitter(startTime, endTime){
+    let times = getTimes(startTime, endTime);
+    return calculateAfternoonPay(times["afternoonStart"], times["afternoonEnd"]) + calculateEveningPay(times["eveningStart"], times["eveningEnd"]) + calculateLateNightPay(times["lateNightStart"], times["lateNightEnd"]);
 }
 
 const afternoonPayRate = 7;
 const eveningPayRate = 11;
 const lateNightPayRate = 13;
 
-let startTime;
-let endTime;
-//
-// function calculateAfternoonPay(startTime, endTime){
-//     return getAfternoonHours(startTime, endTime) * afternoonPayRate;
-// }
+function getTimes(startTime, endTime){
+    let times = { "afternoonStart": startTime, "afternoonEnd": endTime, "eveningStart": startTime, "eveningEnd": endTime, "lateNightStart": startTime, "lateNightEnd": endTime };
+
+    if(isAfternoonExceeding(endTime, startTime))
+        times["afternoonEnd"] = times["eveningStart"] = 17;
+
+    if(isEveningExceeding(endTime, startTime))
+        times["eveningEnd"] = times["lateNightStart"] = 22;
+
+    return times;
+}
+
+function calculateAfternoonPay(startTime, endTime){
+    return getAfternoonHours(startTime, endTime) * afternoonPayRate;
+}
 
 function calculateEveningPay(startTime, endTime){
     return getEveningHours(startTime, endTime) * eveningPayRate;
@@ -23,45 +31,20 @@ function calculateLateNightPay(startTime, endTime){
     return getLateNightHours(startTime, endTime) * lateNightPayRate;
 }
 
+function calculate(startTime, endTime, LateNight){
+    return LateNight ? 24 - startTime + endTime : endTime - startTime;
+}
+
 function getAfternoonHours(startTime, endTime) {
-
-    if(!isAfternoon(startTime))
-        return 0;
-
-    if(isAfternoonExceeding(endTime, startTime))
-        endTime = 17;
-
-    return calculate(startTime, endTime);
+    return isAfternoon(startTime) ? calculate(startTime, endTime) : 0;
 }
 
 function getEveningHours(startTime, endTime){
-    if(isAfternoonExceeding(endTime, startTime))
-        startTime = 17;
-
-    if(!isEvening(startTime))
-        return 0;
-
-    if(isEveningExceeding(endTime, startTime))
-        endTime = 22;
-
-    return calculate(startTime, endTime);
+    return isEvening(startTime) ? calculate(startTime, endTime) : 0;
 }
 
 function getLateNightHours(startTime, endTime){
-    if(isEveningExceeding(endTime, startTime))
-        startTime = 22;
-
-    if(!isLateNight(startTime))
-        return 0;
-
-    return calculate(startTime, endTime, endTime < startTime);
-}
-
-function calculate(startTime, endTime, LateNight){
-    if(LateNight)
-        return 24 - startTime + endTime;
-
-    return endTime - startTime;
+    return isLateNight(startTime) ? calculate(startTime, endTime, endTime < startTime) : 0;
 }
 
 function isAfternoon(startTime){
